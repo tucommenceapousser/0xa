@@ -10,9 +10,9 @@ show_files() {
 
     case "$choice" in
         y|Y )
-            for path in $paths; do
+            for path in "${paths[@]}"; do
                 echo -e "\n\033[1;32mFichiers dans $path :\033[0m"
-                ls "$path"
+                find "$path" -maxdepth 1 -type f -exec basename {} \;
             done
             ;;
         * )
@@ -25,13 +25,16 @@ show_files() {
 search_paths() {
     echo -e "\n\033[1;34mRecherche des chemins web...\033[0m"
 
-    # Utilisation de locate pour une recherche plus rapide
-    paths=$(locate -r '\.php$|\.html$|\.js$|\.css$|\.aspx$' 2>/dev/null | xargs -I {} dirname {})
+    # Ajoutez ici vos commandes pour la recherche des chemins web
+    paths=()
+    while IFS= read -r -d '' path; do
+        paths+=("$path")
+    done < <(find / -type f \( -name "*.php" -o -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.aspx" \) -exec dirname {} \; 2>/dev/null | grep -v '/\.' | sort -u -z)
 
     # Affiche les résultats
-    if [ -n "$paths" ]; then
-        echo -e "\n\033[1;32mChemins trouvés:\033[0m\n$paths"
-        echo -e "$paths" > "$output_file"
+    if [ ${#paths[@]} -gt 0 ]; then
+        echo -e "\n\033[1;32mChemins trouvés:\033[0m\n${paths[@]}"
+        echo -e "${paths[@]}" > "$output_file"
         echo -e "\n\033[1;32mChemins enregistrés dans $output_file\033[0m"
         show_files
     else
