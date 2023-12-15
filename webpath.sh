@@ -25,8 +25,8 @@ show_files() {
 search_paths() {
     echo -e "\n\033[1;34mRecherche des chemins web...\033[0m"
 
-    # Ajoutez ici vos commandes pour la recherche des chemins web
-    paths=$(find / -type f \( -name "*.php" -o -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.aspx" \) -exec dirname {} + 2>/dev/null)
+    # Utilisation de locate pour une recherche plus rapide
+    paths=$(locate -r '\.php$|\.html$|\.js$|\.css$|\.aspx$' 2>/dev/null | xargs -I {} dirname {})
 
     # Affiche les résultats
     if [ -n "$paths" ]; then
