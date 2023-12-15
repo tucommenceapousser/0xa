@@ -3,6 +3,24 @@
 # Fichier de sortie
 output_file="web_paths.txt"
 
+# Fonction pour afficher les fichiers dans le chemin web
+show_files() {
+    echo -e "\n\033[1;34mAffichage des fichiers dans le chemin web...\033[0m"
+    read -p "Voulez-vous afficher les fichiers dans les chemins web trouvés? (y/n): " choice
+
+    case "$choice" in
+        y|Y )
+            for path in $paths; do
+                echo -e "\n\033[1;32mFichiers dans $path :\033[0m"
+                ls "$path"
+            done
+            ;;
+        * )
+            echo -e "\n\033[1;33mAffichage des fichiers annulé.\033[0m"
+            ;;
+    esac
+}
+
 # Fonction pour rechercher les chemins web
 search_paths() {
     echo -e "\n\033[1;34mRecherche des chemins web...\033[0m"
@@ -15,6 +33,7 @@ search_paths() {
         echo -e "\n\033[1;32mChemins trouvés:\033[0m\n$paths"
         echo -e "$paths" > "$output_file"
         echo -e "\n\033[1;32mChemins enregistrés dans $output_file\033[0m"
+        show_files
     else
         echo -e "\n\033[1;31mAucun chemin trouvé.\033[0m"
     fi
