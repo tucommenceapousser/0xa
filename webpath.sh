@@ -10,10 +10,9 @@ show_files() {
 
     case "$choice" in
         y|Y )
-            for path in "${paths[@]}"; do
-                echo -e "\n\033[1;32mFichiers dans $path :\033[0m"
-                find "$path" -maxdepth 1 -type f -exec basename {} \;
-            done
+            echo -e "\n\033[1;34mAffichage des fichiers dans le chemin web...\033[0m"
+            # Utilisation de xargs pour exécuter les commandes en parallèle
+            printf "%s\n" "${paths[@]}" | xargs -I {} -P 4 find {} -maxdepth 1 -type f -exec basename {} \;
             ;;
         * )
             echo -e "\n\033[1;33mAffichage des fichiers annulé.\033[0m"
