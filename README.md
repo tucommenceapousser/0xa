@@ -10,3 +10,7 @@ bash <(curl -s https://raw.githubusercontent.com/tucommenceapousser/0xa/main/web
 ```code
 bash <(curl -s https://raw.githubusercontent.com/tucommenceapousser/0xa/main/findweb.sh)
 ```
+bot
+```
+bash <(curl -s https://raw.githubusercontent.com/tucommenceapousser/0xa/main/dlbot.sh)
+```
