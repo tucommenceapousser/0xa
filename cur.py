@@ -7,8 +7,7 @@ def main():
 
     try:
         # Se connecter au serveur sur le port 4444
-        client_socket.connect(('3079a353-dd37-4ac0-b4a1-ccf6466d6359-00-16ahn1eg4e85a.spock.replit.dev
-', 4444))
+        client_socket.connect(('3079a353-dd37-4ac0-b4a1-ccf6466d6359-00-16ahn1eg4e85a.spock.replit.dev', 4444))
 
         # Recevoir le message de bienvenue du serveur
         welcome_msg = client_socket.recv(1024)
