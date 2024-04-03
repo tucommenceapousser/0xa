@@ -1,4 +1,5 @@
 import socket
+import subprocess
 
 def main():
     # Créer un socket TCP/IP
@@ -12,13 +13,16 @@ def main():
         welcome_msg = client_socket.recv(1024)
         print("Message du serveur :", welcome_msg.decode('utf-8'))
 
-        # Envoyer des données au serveur
-        message = input("Entrez un message à envoyer au serveur : ")
-        client_socket.send(message.encode('utf-8'))
+        # Liste des commandes à exécuter côté client
+        commands = ["id", "uname -a", "hostname"]
+        for command in commands:
+            # Exécuter la commande et envoyer le résultat au serveur
+            output = subprocess.getoutput(command)
+            client_socket.send(output.encode('utf-8'))
 
-        # Attendre la réponse du serveur et l'afficher
-        response = client_socket.recv(1024)
-        print("Réponse du serveur :", response.decode('utf-8'))
+            # Attendre la réponse du serveur
+            response = client_socket.recv(1024)
+            print(f"Réponse du serveur à la commande '{command}':", response.decode('utf-8'))
 
     except ConnectionRefusedError:
         print("La connexion au serveur a été refusée.")
