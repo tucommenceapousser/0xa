@@ -6,7 +6,7 @@ def main():
 
     try:
         # Se connecter au serveur sur le port 4444
-        client_socket.connect(('localhost', 4444))
+        client_socket.connect(('154.12.234.206', 4444))
 
         # Recevoir le message de bienvenue du serveur
         welcome_msg = client_socket.recv(1024)
